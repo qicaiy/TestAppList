@@ -1,4 +1,4 @@
-name: Build Unsigned APK
+name: Build Unsigned APKS
 
 on:
   push:
@@ -7,13 +7,13 @@ on:
 
 jobs:
   build-apk:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # 显式指定与你的运行器匹配的系统
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4  # 升级到新版Java工具
         with:
           java-version: 17
           distribution: 'temurin'
@@ -22,10 +22,10 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Debug APK (Unsigned)
-        run: ./gradlew assembleDebug  # 直接生成未签名包
+        run: ./gradlew assembleDebug
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # 使用新版上传工具
         with:
           name: debug-apk
-          path: app/build/outputs/apk/debug/*.apk
+          path: app/build/outputs/apk/debug/app-debug.apk  # 精确指定路径
